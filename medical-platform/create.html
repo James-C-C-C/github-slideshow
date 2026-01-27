@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publish Article - MedPub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                <span>MedPub</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Articles</a>
+                <a href="create.html" class="nav-link active">Publish</a>
+                <a href="index.html#categories" class="nav-link">Categories</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="previewBtn">Preview</button>
+                <button class="btn btn-primary" id="publishBtn">Publish</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Editor Container -->
+    <main class="editor-page">
+        <div class="editor-container">
+            <!-- Editor Sidebar -->
+            <aside class="editor-sidebar">
+                <div class="sidebar-section">
+                    <h3>Article Settings</h3>
+
+                    <div class="form-group">
+                        <label for="articleCategory">Category</label>
+                        <select id="articleCategory" required>
+                            <option value="">Select category</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="oncology">Oncology</option>
+                            <option value="infectious-disease">Infectious Disease</option>
+                            <option value="pediatrics">Pediatrics</option>
+                            <option value="research">Clinical Research</option>
+                            <option value="general">General Medicine</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleTags">Tags</label>
+                        <input type="text" id="articleTags" placeholder="e.g., COVID-19, vaccine, clinical trial">
+                        <small>Separate tags with commas</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleType">Article Type</label>
+                        <select id="articleType">
+                            <option value="article">Article</option>
+                            <option value="research">Research Paper</option>
+                            <option value="review">Literature Review</option>
+                            <option value="case-study">Case Study</option>
+                            <option value="opinion">Opinion/Editorial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Author Information</h3>
+
+                    <div class="form-group">
+                        <label for="authorName">Your Name</label>
+                        <input type="text" id="authorName" placeholder="Dr. Jane Smith" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="authorTitle">Title/Credentials</label>
+                        <input type="text" id="authorTitle" placeholder="MD, PhD, FACC">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="authorAffiliation">Affiliation</label>
+                        <input type="text" id="authorAffiliation" placeholder="Harvard Medical School">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="authorBio">Short Bio</label>
+                        <textarea id="authorBio" rows="3" placeholder="Brief professional background..."></textarea>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Cover Image</h3>
+                    <div class="image-upload" id="imageUpload">
+                        <input type="file" id="coverImage" accept="image/*" hidden>
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            <p>Click to upload cover image</p>
+                            <small>Recommended: 1200x630px</small>
+                        </div>
+                        <div class="upload-preview" id="uploadPreview" style="display: none;">
+                            <img id="previewImage" src="" alt="Cover preview">
+                            <button class="remove-image" id="removeImage">&times;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Upload PDF/Document</h3>
+                    <div class="file-upload" id="fileUpload">
+                        <input type="file" id="pdfUpload" accept=".pdf,.doc,.docx" hidden>
+                        <div class="upload-placeholder" id="pdfPlaceholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="12" y1="18" x2="12" y2="12"/>
+                                <line x1="9" y1="15" x2="15" y2="15"/>
+                            </svg>
+                            <p>Upload PDF or Document</p>
+                            <small>Max size: 10MB</small>
+                        </div>
+                        <div class="file-info" id="fileInfo" style="display: none;">
+                            <span class="file-name" id="fileName"></span>
+                            <button class="remove-file" id="removeFile">&times;</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Editor -->
+            <div class="editor-main">
+                <div class="editor-header">
+                    <input type="text" class="title-input" id="articleTitle" placeholder="Article Title" required>
+                    <input type="text" class="subtitle-input" id="articleSubtitle" placeholder="Add a subtitle (optional)">
+                </div>
+
+                <!-- Formatting Toolbar -->
+                <div class="editor-toolbar">
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="bold" title="Bold (Ctrl+B)">
+                            <strong>B</strong>
+                        </button>
+                        <button class="toolbar-btn" data-command="italic" title="Italic (Ctrl+I)">
+                            <em>I</em>
+                        </button>
+                        <button class="toolbar-btn" data-command="underline" title="Underline (Ctrl+U)">
+                            <u>U</u>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="h2" title="Heading 2">
+                            H2
+                        </button>
+                        <button class="toolbar-btn" data-command="h3" title="Heading 3">
+                            H3
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="ul" title="Bullet List">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6"/>
+                                <line x1="8" y1="12" x2="21" y2="12"/>
+                                <line x1="8" y1="18" x2="21" y2="18"/>
+                                <circle cx="3" cy="6" r="1" fill="currentColor"/>
+                                <circle cx="3" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="3" cy="18" r="1" fill="currentColor"/>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" data-command="ol" title="Numbered List">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="10" y1="6" x2="21" y2="6"/>
+                                <line x1="10" y1="12" x2="21" y2="12"/>
+                                <line x1="10" y1="18" x2="21" y2="18"/>
+                                <text x="3" y="8" font-size="8" fill="currentColor">1</text>
+                                <text x="3" y="14" font-size="8" fill="currentColor">2</text>
+                                <text x="3" y="20" font-size="8" fill="currentColor">3</text>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="quote" title="Block Quote">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" data-command="link" title="Insert Link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" data-command="image" title="Insert Image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" data-command="reference" title="Add Citation/Reference">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content Editor -->
+                <div class="editor-content">
+                    <div class="content-editor" id="contentEditor" contenteditable="true" placeholder="Start writing your article...
+
+You can format text using the toolbar above, or use keyboard shortcuts:
+• Ctrl+B for bold
+• Ctrl+I for italic
+• Ctrl+U for underline
+
+Add references, images, and citations to make your article comprehensive and evidence-based."></div>
+                </div>
+
+                <!-- References Section -->
+                <div class="references-section">
+                    <h3>References & Citations</h3>
+                    <div class="references-list" id="referencesList">
+                        <!-- Dynamically populated -->
+                    </div>
+                    <button class="btn btn-outline add-reference" id="addReferenceBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Reference
+                    </button>
+                </div>
+
+                <!-- Word Count & Auto-save Status -->
+                <div class="editor-status">
+                    <span class="word-count">Words: <span id="wordCount">0</span></span>
+                    <span class="reading-time">Est. reading time: <span id="readingTime">0</span> min</span>
+                    <span class="auto-save" id="autoSaveStatus">All changes saved</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Preview Modal -->
+    <div class="modal preview-modal" id="previewModal">
+        <div class="modal-content preview-content">
+            <div class="preview-header">
+                <h2>Article Preview</h2>
+                <button class="modal-close" id="previewClose">&times;</button>
+            </div>
+            <div class="preview-body" id="previewBody">
+                <!-- Preview content -->
+            </div>
+            <div class="preview-footer">
+                <button class="btn btn-outline" id="closePreviewBtn">Continue Editing</button>
+                <button class="btn btn-primary" id="publishFromPreviewBtn">Publish Article</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reference Modal -->
+    <div class="modal" id="referenceModal">
+        <div class="modal-content">
+            <button class="modal-close" id="refModalClose">&times;</button>
+            <h2>Add Reference</h2>
+            <form class="reference-form" id="referenceForm">
+                <div class="form-group">
+                    <label for="refType">Reference Type</label>
+                    <select id="refType">
+                        <option value="journal">Journal Article</option>
+                        <option value="book">Book</option>
+                        <option value="website">Website</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="refAuthors">Authors</label>
+                    <input type="text" id="refAuthors" placeholder="Smith J, Doe A, et al.">
+                </div>
+                <div class="form-group">
+                    <label for="refTitle">Title</label>
+                    <input type="text" id="refTitle" placeholder="Article or book title" required>
+                </div>
+                <div class="form-group">
+                    <label for="refSource">Journal/Publisher</label>
+                    <input type="text" id="refSource" placeholder="New England Journal of Medicine">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="refYear">Year</label>
+                        <input type="text" id="refYear" placeholder="2024">
+                    </div>
+                    <div class="form-group">
+                        <label for="refVolume">Volume/Issue</label>
+                        <input type="text" id="refVolume" placeholder="Vol. 12, Issue 3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="refDOI">DOI/URL</label>
+                    <input type="text" id="refDOI" placeholder="10.1000/xyz123 or https://...">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Add Reference</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Link Modal -->
+    <div class="modal" id="linkModal">
+        <div class="modal-content">
+            <button class="modal-close" id="linkModalClose">&times;</button>
+            <h2>Insert Link</h2>
+            <form class="link-form" id="linkForm">
+                <div class="form-group">
+                    <label for="linkText">Link Text</label>
+                    <input type="text" id="linkText" placeholder="Display text">
+                </div>
+                <div class="form-group">
+                    <label for="linkUrl">URL</label>
+                    <input type="url" id="linkUrl" placeholder="https://..." required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Insert Link</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content success-content">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <h2>Article Published!</h2>
+            <p>Your article has been successfully published and is now live on MedPub.</p>
+            <div class="success-actions">
+                <a href="index.html" class="btn btn-outline">Back to Home</a>
+                <a href="#" class="btn btn-primary" id="viewArticleBtn">View Article</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/create.js"></script>
+</body>
+</html>
